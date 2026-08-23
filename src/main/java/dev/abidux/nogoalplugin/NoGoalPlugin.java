@@ -1,5 +1,6 @@
 package dev.abidux.nogoalplugin;
 
+import java.util.Set;
 import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
@@ -21,6 +22,8 @@ public class NoGoalPlugin extends JavaPlugin {
     public void onEnable() {
         NoGoalPlugin.instance = this;
         this.saveDefaultConfig();
+
+        this.readPlayerData();
         
         String token = getConfig().getString("bot_token");
         if (token.equals("placeholder")) {
@@ -47,6 +50,16 @@ public class NoGoalPlugin extends JavaPlugin {
             entry.getValue().saveTo(getConfig(), "player_data." + entry.getKey());
         }
         saveConfig();
+    }
+
+    private void readPlayerData() {
+        if (!getConfig().isSet("player_data")) return;
+        
+        Set<String> playerNames = getConfig().getConfigurationSection("player_data").getKeys(false);
+        for (String playerName : playerNames) {
+            PlayerData data = PlayerData.fromConfig(getConfig(), "player_data." + playerName);
+            data.save(playerName);
+        }
     }
 
     @Override

@@ -29,6 +29,12 @@ public class PlayerData {
         save(player.getName());
     }
 
+    public static PlayerData fromConfig(FileConfiguration config, String baseKey) {
+        PlayerData data = new PlayerData();
+        data.setKeepInventoryActive(config.getBoolean(baseKey + ".keep_inventory_active"));
+        return data;
+    }
+
     public void saveTo(FileConfiguration config, String baseKey) {
         config.set(baseKey + ".keep_inventory_active", this.keepInventoryActive);
     }

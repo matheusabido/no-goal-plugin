@@ -25,7 +25,7 @@ public class QolCommand implements CommandExecutor {
         }
 
         PlayerData data = PlayerData.get(player);
-        Inventory inventory = Bukkit.createInventory(null, 3*9, Component.text("Quality of Life", NamedTextColor.GRAY));
+        Inventory inventory = Bukkit.createInventory(null, 3*9, Component.text("Quality of Life", NamedTextColor.DARK_GRAY));
 
         ItemCreator keepInventory = ItemCreator.builder()
             .material(Material.SKELETON_SKULL)

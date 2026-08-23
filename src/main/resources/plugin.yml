@@ -1,0 +1,6 @@
+name: NoGoalPlugin
+version: 1.0.0
+main: dev.abidux.nogoalplugin.NoGoalPlugin
+api-version: '26.2'
+author: abidux
+description: NoGoalPlugin

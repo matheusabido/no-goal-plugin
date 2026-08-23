@@ -4,3 +4,5 @@ main: dev.abidux.nogoalplugin.NoGoalPlugin
 api-version: '26.2'
 author: abidux
 description: NoGoalPlugin
+commands:
+  qol:

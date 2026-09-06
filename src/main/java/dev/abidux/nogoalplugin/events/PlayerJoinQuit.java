@@ -13,6 +13,10 @@ public class PlayerJoinQuit implements Listener {
     
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
+        if (event.getPlayer().getName().toLowerCase().endsWith("_bot")) {
+            return;
+        }
+
         DiscordBot bot = NoGoalPlugin.getBot(); 
         Long textChannelId = NoGoalPlugin.getInstance().getConfig().getLong("text_channel_id");
         Long joinNotificationRoleId = NoGoalPlugin.getInstance().getConfig().getLong("join_notification_role_id");
@@ -23,6 +27,10 @@ public class PlayerJoinQuit implements Listener {
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
+        if (event.getPlayer().getName().toLowerCase().endsWith("_bot")) {
+            return;
+        }
+
         DiscordBot bot = NoGoalPlugin.getBot(); 
         Long textChannelId = NoGoalPlugin.getInstance().getConfig().getLong("text_channel_id");
         Long joinNotificationRoleId = NoGoalPlugin.getInstance().getConfig().getLong("join_notification_role_id");

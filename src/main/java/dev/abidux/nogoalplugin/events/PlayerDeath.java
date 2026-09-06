@@ -15,6 +15,8 @@ public class PlayerDeath implements Listener {
         if (data.isKeepInventoryActive()) {
             event.setKeepInventory(true);
             event.getDrops().clear();
+            event.setNewExp(event.getPlayer().calculateTotalExperiencePoints());
+            event.setDroppedExp(0);
         }
     }
 

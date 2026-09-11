@@ -11,6 +11,7 @@ import dev.abidux.nogoalplugin.commands.QolCommand;
 import dev.abidux.nogoalplugin.events.InvClick;
 import dev.abidux.nogoalplugin.events.PlayerDeath;
 import dev.abidux.nogoalplugin.events.PlayerJoinQuit;
+import dev.abidux.nogoalplugin.events.StopEndermen;
 import dev.abidux.nogoalplugin.model.PlayerData;
 
 public class NoGoalPlugin extends JavaPlugin {
@@ -26,19 +27,19 @@ public class NoGoalPlugin extends JavaPlugin {
         this.readPlayerData();
         
         String token = getConfig().getString("bot_token");
-        if (token.equals("placeholder")) {
-            Bukkit.getConsoleSender().sendMessage("§cNoGoalPlugin não foi configurado. Desativando.");
-            Bukkit.getPluginManager().disablePlugin(this);
+        if (!token.equals("placeholder")) {
+            NoGoalPlugin.discordBotInstance = new DiscordBot(token);
+            Bukkit.getScheduler().runTask(this, discordBotInstance::start);
+
+            Bukkit.getPluginManager().registerEvents(new PlayerJoinQuit(), this);
             return;
         }
 
-        NoGoalPlugin.discordBotInstance = new DiscordBot(token);
-        Bukkit.getScheduler().runTask(this, discordBotInstance::start);
         Bukkit.getScheduler().runTaskTimer(this, this::savePlayerData, 10 * 60 * 20, 10 * 60 * 20);
         
-        Bukkit.getPluginManager().registerEvents(new PlayerJoinQuit(), this);
         Bukkit.getPluginManager().registerEvents(new PlayerDeath(), this);
         Bukkit.getPluginManager().registerEvents(new InvClick(), this);
+        Bukkit.getPluginManager().registerEvents(new StopEndermen(), this);
 
         getCommand("qol").setExecutor(new QolCommand());
         

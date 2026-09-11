@@ -17,7 +17,7 @@ public class PlayerJoinQuit implements Listener {
             return;
         }
 
-        DiscordBot bot = NoGoalPlugin.getBot(); 
+        DiscordBot bot = NoGoalPlugin.getBot();
         Long textChannelId = NoGoalPlugin.getInstance().getConfig().getLong("text_channel_id");
         Long joinNotificationRoleId = NoGoalPlugin.getInstance().getConfig().getLong("join_notification_role_id");
 

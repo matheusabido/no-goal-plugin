@@ -4,20 +4,25 @@ import java.util.Set;
 import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
+import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import dev.abidux.nogoalplugin.bot.DiscordBot;
+import dev.abidux.nogoalplugin.commands.MinecartLoadChunksCommand;
 import dev.abidux.nogoalplugin.commands.QolCommand;
 import dev.abidux.nogoalplugin.events.InvClick;
 import dev.abidux.nogoalplugin.events.PlayerDeath;
 import dev.abidux.nogoalplugin.events.PlayerJoinQuit;
 import dev.abidux.nogoalplugin.events.StopEndermen;
 import dev.abidux.nogoalplugin.model.PlayerData;
+import dev.abidux.nogoalplugin.scheduler.MinecartScheduler;
 
 public class NoGoalPlugin extends JavaPlugin {
 
     private static NoGoalPlugin instance;
     private static DiscordBot discordBotInstance;
+
+    public static final NamespacedKey KEY_MLC = NamespacedKey.minecraft("mlc");
 
     @Override
     public void onEnable() {
@@ -35,12 +40,15 @@ public class NoGoalPlugin extends JavaPlugin {
         }
 
         Bukkit.getScheduler().runTaskTimer(this, this::savePlayerData, 10 * 60 * 20, 10 * 60 * 20);
-        
+        Bukkit.getScheduler().runTaskTimer(this, new MinecartScheduler(), 0, 1);
+        Bukkit.getScheduler().runTaskTimer(this, MinecartScheduler::unloadChunks, 20, 20);
+
         Bukkit.getPluginManager().registerEvents(new PlayerDeath(), this);
         Bukkit.getPluginManager().registerEvents(new InvClick(), this);
         Bukkit.getPluginManager().registerEvents(new StopEndermen(), this);
 
         getCommand("qol").setExecutor(new QolCommand());
+        getCommand("mlc").setExecutor(new MinecartLoadChunksCommand());
         
         Bukkit.getConsoleSender().sendMessage("§aNoGoalPlugin iniciado.");
     }
@@ -65,6 +73,7 @@ public class NoGoalPlugin extends JavaPlugin {
     @Override
     public void onDisable() {
         this.savePlayerData();
+        MinecartScheduler.unloadChunks();
         Bukkit.getConsoleSender().sendMessage("§cNoGoalPlugin finalizado.");
     }
 

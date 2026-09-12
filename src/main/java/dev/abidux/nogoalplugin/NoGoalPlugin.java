@@ -32,7 +32,6 @@ public class NoGoalPlugin extends JavaPlugin {
             Bukkit.getScheduler().runTask(this, discordBotInstance::start);
 
             Bukkit.getPluginManager().registerEvents(new PlayerJoinQuit(), this);
-            return;
         }
 
         Bukkit.getScheduler().runTaskTimer(this, this::savePlayerData, 10 * 60 * 20, 10 * 60 * 20);

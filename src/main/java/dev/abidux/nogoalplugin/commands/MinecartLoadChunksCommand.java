@@ -9,6 +9,7 @@ import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
 import dev.abidux.nogoalplugin.NoGoalPlugin;
+import dev.abidux.nogoalplugin.scheduler.MinecartScheduler;
 import dev.abidux.nogoalplugin.utils.MineUtils;
 
 public class MinecartLoadChunksCommand implements CommandExecutor {
@@ -16,6 +17,14 @@ public class MinecartLoadChunksCommand implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
         if (!(sender instanceof Player player)) {
             sender.sendMessage("§cCommand only available for players");
+            return true;
+        }
+
+        if (args.length >= 1) {
+            if (args[0].equalsIgnoreCase("chunks")) {
+                int forceLoadedChunks = player.getWorld().getForceLoadedChunks().size();
+                sender.sendMessage("§7" + MinecartScheduler.CHUNKS_TO_UNLOAD.size() + " chunks are loaded. " + forceLoadedChunks + " chunks are force loaded in this world.");
+            }
             return true;
         }
 

@@ -1,10 +1,13 @@
 package dev.abidux.nogoalplugin;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Set;
 import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import dev.abidux.nogoalplugin.bot.DiscordBot;
@@ -24,10 +27,23 @@ public class NoGoalPlugin extends JavaPlugin {
 
     public static final NamespacedKey KEY_MLC = NamespacedKey.minecraft("mlc");
 
+    private YamlConfiguration mlcConfig;
+    private File mlcConfigFile = new File(getDataFolder(), "mlc.yml");
+
     @Override
     public void onEnable() {
         NoGoalPlugin.instance = this;
         this.saveDefaultConfig();
+
+        if (!this.mlcConfigFile.exists()) {
+            try {
+                this.mlcConfigFile.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        this.mlcConfig = YamlConfiguration.loadConfiguration(this.mlcConfigFile);
+        MinecartScheduler.loadChunksToUnload(mlcConfig);
 
         this.readPlayerData();
         
@@ -73,7 +89,15 @@ public class NoGoalPlugin extends JavaPlugin {
     @Override
     public void onDisable() {
         this.savePlayerData();
+        
         MinecartScheduler.unloadChunks();
+        MinecartScheduler.setChunksToUnload(mlcConfig);
+        try {
+            mlcConfig.save(this.mlcConfigFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         Bukkit.getConsoleSender().sendMessage("§cNoGoalPlugin finalizado.");
     }
 
